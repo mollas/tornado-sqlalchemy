@@ -1,6 +1,7 @@
 from contextlib import contextmanager
 from concurrent.futures import ThreadPoolExecutor
 import multiprocessing
+from tornado.ioloop import IOLoop
 
 from sqlalchemy import create_engine, event
 from sqlalchemy.ext.declarative import declarative_base as sa_declarative_base
@@ -8,8 +9,12 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy.engine.url import make_url
 
 __all__ = ['SessionMixin', 'set_max_workers', 'as_future',
-           'make_session_factory', 'declarative_base']
+           'make_session_factory', 'declarative_base', 'call_blocking']
 
+async def call_blocking(args):
+    """http://www.tornadoweb.org/en/stable/ioloop.html#tornado.ioloop.IOLoop.run_in_executor
+    """
+    return await IOLoop.current().run_in_executor(None, blocking_func, *args)
 
 class MissingFactoryError(Exception):
     pass
