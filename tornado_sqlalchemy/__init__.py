@@ -11,7 +11,7 @@ from sqlalchemy.engine.url import make_url
 __all__ = ['SessionMixin', 'set_max_workers', 'as_future',
            'make_session_factory', 'declarative_base', 'call_blocking']
 
-async def call_blocking(args):
+async def call_blocking(blocking_func, args=[]):
     """http://www.tornadoweb.org/en/stable/ioloop.html#tornado.ioloop.IOLoop.run_in_executor
     """
     return await IOLoop.current().run_in_executor(None, blocking_func, *args)
